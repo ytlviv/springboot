@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:int="http://www.springframework.org/schema/integration"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+	<!-- 引入Redis异步队列机制来实现添加日志，与日志提交到logserv的解耦 -->
+	<bean id="redisConnectionFactory"
+		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+		<property name="port" value="6379" />
+		<property name="hostName" value="${logserv.host}" />
+	</bean>
+
+	<bean id="redisMessageListenerContainer"
+		class="org.springframework.data.redis.listener.RedisMessageListenerContainer">
+		<property name="connectionFactory" ref="redisConnectionFactory" />
+	</bean>
+
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+		<property name="connectionFactory" ref="redisConnectionFactory" />
+	</bean>
+
+	<bean id="redisMessageListenerAdapter"
+		class="org.springframework.data.redis.listener.adapter.MessageListenerAdapter">
+		<constructor-arg>
+			<ref bean="logMgr" />
+		</constructor-arg>
+		<constructor-arg value="asyncLogReceived" />
+	</bean>
+	
+	<bean id="logMgr" class="com.cwc.app.floor.api.FloorLogMgr">
+		<property name="restBaseUrl" value="http://${logserv.host}:3000" />
+		<property name="redisTemplate" ref="redisTemplate" />
+		<property name="mock" value="true" />
+	</bean>
+	
+	<bean id="logFilter" class="com.cwc.app.floor.api.FloorLogFilterMgr">
+		<property name="restBaseUrl" value="http://${logserv.host}:3000" />
+	</bean>
+	
+	
+</beans>
+
+
+
+
+
+
+
+

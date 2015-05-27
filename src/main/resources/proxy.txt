@@ -1,0 +1,5 @@
+login.url=http://192.168.1.15/Sync10/action/admin/AccountLoginMgrAction.action
+logout.url=http://192.168.1.232/Sync10/action/administrator/adminLogout.action
+session.url=http://192.168.1.15/Sync10/_fileserv/redis_session
+validateCode.url=http://192.168.1.232/Sync10/loginLicence
+

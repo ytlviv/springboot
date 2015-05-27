@@ -1,0 +1,36 @@
+buildscript {
+    repositories { 
+        jcenter()
+		maven { url "http://repo.spring.io/snapshot" }
+		maven { url "http://repo.spring.io/milestone" }
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.1.6.RELEASE"
+		classpath 'org.springframework:springloaded:1.2.0.RELEASE'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'spring-boot'
+
+[ compileJava, compileTestJava ]*.options*.encoding = 'UTF-8'
+
+repositories { 
+    jcenter()
+    maven { url "http://repo.spring.io/snapshot" }
+    maven { url "http://repo.spring.io/milestone" }
+}
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-web'
+	compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
+	compile 'log4j:log4j:1.2.17'
+	compile 'commons-dbcp:commons-dbcp:1.4'
+	compile 'org.springframework:spring-jdbc'
+	compile 'org.apache.httpcomponents:httpclient:4.4.1'
+	compile fileTree(dir: './lib', include: ['*.jar'])
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+	runtime 'mysql:mysql-connector-java:5.1.32'
+	runtime 'org.springframework.data:spring-data-redis:1.4.0.RELEASE'
+	runtime 'redis.clients:jedis:2.5.1'
+}
